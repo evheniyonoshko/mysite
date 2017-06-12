@@ -47,17 +47,15 @@ def logout(request):
 
 
 def send_registration_confirmation(user):
-	p = user.get_profile()
 	title = "Account confirmation"
-	content = "http://secure-harbor-61874.herokuapp.com/confirm/" + str(p.confirmation_code) + "/" + user.username
+	content = "http://secure-harbor-61874.herokuapp.com/confirm/" + str(user.confirmation_code) + "/" + user.email
 	send_mail(title, content, 'no-reply@secure-harbor-61874.herokuapp.com', [user.email], fail_silently=False)
 
 
-def confirm(request, confirmation_code, username):
+def confirm(request, confirmation_code, email):
 	try:
-		user = models.User.objects.get(username=username)
-		profile = user.get_profile()
-		if profile.confirmation_code == confirmation_code and user.date_joined > (datetime.now()-timedelta(days=1)):
+		user = models.User.objects.get(email=email)
+		if user.confirmation_code == confirmation_code and user.date_joined > (datetime.now()-timedelta(days=1)):
 			user.is_active = True
 			user.save()
 			user.backend='django.contrib.auth.backends.ModelBackend' 
@@ -77,16 +75,16 @@ def sing_up(request, page='sing_up'):
                 user = models.User.objects.get(email=form.cleaned_data['email'])
                 raise ValueError('This email address already exists. Please try again')
             except:
+                confirmation_code = ''.join(random.choice(string.ascii_uppercase + string.digits + string.ascii_lowercase) for x in range(33))
                 user = models.User(email=form.cleaned_data['email'],
                                    username=form.cleaned_data['username'],
                                    first_name=form.cleaned_data['first_name'],
                                    last_name=form.cleaned_data['last_name'],
                                    birthday=form.cleaned_data['birthday'],
                                    country=form.cleaned_data['country'],
-                                   city=form.cleaned_data['city'],)
+                                   city=form.cleaned_data['city'],
+                                   confirmation_code=confirmation_code)
                 user.set_password = form.cleaned_data['password']
-                user.save()
-                user.confirmation_code = ''.join(random.choice(string.ascii_uppercase + string.digits + string.ascii_lowercase) for x in range(33))
                 user.save()
                 send_registration_confirmation(user)
     return render(request, 'sing_up.html', context={'form': form})
