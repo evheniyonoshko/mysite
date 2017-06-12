@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
-from django.db.models.signals import post_save
 from django.contrib.auth import models as auth_models
 
 from lib import uploads
@@ -67,6 +66,7 @@ class User(auth_models.PermissionsMixin, auth_models.AbstractBaseUser):
     birthday = models.DateField(blank=True, null=True)
     country = models.CharField(max_length=128, choices=COUNTRY)
     city = models.CharField(max_length=128)
+    confirmation_code = models.CharField(max_length=128,)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 
@@ -96,13 +96,3 @@ class User(auth_models.PermissionsMixin, auth_models.AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
-
-class Profile(models.Model):
-    user = models.OneToOneField(User)
-    confirmation_code = models.CharField(max_length=128,)
-
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-post_save.connect(create_user_profile, sender=User)

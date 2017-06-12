@@ -86,8 +86,7 @@ def sing_up(request, page='sing_up'):
                                    city=form.cleaned_data['city'],)
                 user.set_password = form.cleaned_data['password']
                 user.save()
-                confirmation_code = ''.join(random.choice(string.ascii_uppercase + string.digits + string.ascii_lowercase) for x in range(33))
-                p = models.Profile(user=user, confirmation_code=confirmation_code)
-                p.save()
+                user.confirmation_code = ''.join(random.choice(string.ascii_uppercase + string.digits + string.ascii_lowercase) for x in range(33))
+                user.save()
                 send_registration_confirmation(user)
     return render(request, 'sing_up.html', context={'form': form})
