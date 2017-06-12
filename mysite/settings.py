@@ -67,6 +67,7 @@ try:
     from mysite.settings_local import DATABASES
 except:
     import dj_database_url
+    DATABASES = {}
     DATABASES['default'] =  dj_database_url.config()
 
 
@@ -120,3 +121,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 STATICFILES_DIRS=(os.path.join(BASE_DIR,'static'),)
 
 LOGIN_URL = '/accounts/login/'
+
+DISABLE_COLLECTSTATIC=1
