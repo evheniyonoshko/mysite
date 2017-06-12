@@ -69,10 +69,10 @@ except:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'dd701l2rdch2qg',
-            'USER': 'gilbytfppnmitv',
-            'PASSWORD': '658f481e24d00f898e8798ea2de370f033d603c185d49ca9f104179146e60101',
-            'HOST': 'ec2-54-217-212-8.eu-west-1.compute.amazonaws.com',
+            'NAME': 'dvrkv2ounqlo3',
+            'USER': 'pkyldlauoglxuy',
+            'PASSWORD': 'd6744527f8e6266d7bcc9db45727187116b0fd6c855bd9becb42ce5b3dd83fc8',
+            'HOST': 'ec2-176-34-111-152.eu-west-1.compute.amazonaws.com',
             'PORT': '5432',
         }
     }
