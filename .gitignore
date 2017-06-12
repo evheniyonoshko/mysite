@@ -5,7 +5,13 @@ __pycache__/
 
 # C extensions
 *.so
+
+
 */migrations/*
+
+static_root/*
+
+
 # Distribution / packaging
 .Python
 env/
