@@ -49,7 +49,7 @@ def logout(request):
 def send_registration_confirmation(user):
 	title = "Account confirmation"
 	content = "http://mysite-test-task.herokuapp.com/confirm/" + str(user.confirmation_code) + "/" + user.email
-	send_mail(title, content, 'no-reply@mysite-test-task.herokuapp.com', [user.email], fail_silently=False)
+	send_mail(title, content, 'admin@mysite-test-task.herokuapp.com', [user.email], fail_silently=False)
 
 
 def confirm(request, confirmation_code, email):
