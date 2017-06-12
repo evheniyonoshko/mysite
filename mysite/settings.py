@@ -66,10 +66,16 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 try:
     from mysite.settings_local import DATABASES
 except:
-    import dj_database_url
-    DATABASES = {}
-    DATABASES['default'] =  dj_database_url.config()
-
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'dd701l2rdch2qg',
+            'USER': 'gilbytfppnmitv',
+            'PASSWORD': '658f481e24d00f898e8798ea2de370f033d603c185d49ca9f104179146e60101',
+            'HOST': 'ec2-54-217-212-8.eu-west-1.compute.amazonaws.com',
+            'PORT': '5432',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
