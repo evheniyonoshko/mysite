@@ -63,7 +63,7 @@ class User(auth_models.PermissionsMixin, auth_models.AbstractBaseUser):
     username = models.CharField(max_length=128, blank=True, null=True)
     first_name = models.CharField(max_length=128, blank=True)
     last_name = models.CharField(max_length=128, blank=True)
-    birthday = models.DateField()
+    birthday = models.DateField(blank=True, null=True)
     country = models.CharField(max_length=128, choices=COUNTRY)
     city = models.CharField(max_length=128)
     is_active = models.BooleanField(default=False)
@@ -95,3 +95,7 @@ class User(auth_models.PermissionsMixin, auth_models.AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
+
+class Profile(models.Model):
+    user = models.OneToOneField(User)
+    confirmation_code = models.CharField(max_length=128,)

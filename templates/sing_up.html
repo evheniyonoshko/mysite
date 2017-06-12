@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+{% if form.errors %}
+    <div style="color: red;">{{ form.errors }}</div>
+{% endif %}
+        <form class="form-horizontal" method="post" action="{% url 'sing_up'%}">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                Email
+                            </span>
+                            {{ form.email }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                Username
+                            </span>
+                            {{ form.username }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                Password
+                            </span>
+                            {{ form.password }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                First Name
+                            </span>
+                            {{ form.first_name }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                Last Name
+                            </span>
+                            {{ form.last_name }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                Birthday
+                            </span>
+                            {{ form.birthday }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                Country
+                            </span>
+                            {{ form.country }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                City
+                            </span>
+                            {{ form.city }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <button type="submit" class="btn">Sing Up</button>
+                    </div>
+                    
+                </div>
+            </div>
+        </form>
+{% endblock %}
