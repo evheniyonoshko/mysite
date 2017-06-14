@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
-from posts.models import User
+from posts.models import User, Post
 from mysite import settings
 from django.forms import extras
 from datetime import datetime
@@ -28,7 +28,7 @@ class LoginForm(forms.Form):
     email = forms.EmailField(
         label='E-Mail',
         max_length=128,
-        widget=forms.TextInput(attrs={'placeholder': 'tinyperson@gmail'})
+        widget=forms.TextInput(attrs={'placeholder': 'tinyperson@gmail.com'})
     )
     password = forms.CharField(
         label='password',
@@ -37,11 +37,60 @@ class LoginForm(forms.Form):
     )
 
 
-class SingUpFrom(forms.ModelForm):
-    password = forms.CharField(label='Password', max_length=128, widget=forms.PasswordInput)
-    birthday = forms.DateField(widget=extras.SelectDateWidget(years=range(datetime.now().year - 100, datetime.now().year)))
-
+class SingUpForm(forms.ModelForm):
+    email = forms.EmailField(
+        label='E-Mail',
+        max_length=128,
+        widget=forms.TextInput(attrs={'placeholder': 'tinyperson@gmail.com'})
+    )
+    password = forms.CharField(
+        label='Password',
+        max_length=128,
+        widget=forms.PasswordInput(attrs={'placeholder': 'password'}))
+    username = forms.CharField(
+        label='Username',
+        max_length=128,
+        widget=forms.TextInput(attrs={'placeholder': 'Username'})
+    )
+    first_name = forms.CharField(
+        label='First Name',
+        max_length=128,
+        widget=forms.TextInput(attrs={'placeholder': 'First Name'})
+    )
+    last_name = forms.CharField(
+        label='Last Name',
+        max_length=128,
+        widget=forms.TextInput(attrs={'placeholder': 'Last Name'})
+    )
+    birthday = forms.DateField(
+        widget=extras.SelectDateWidget(
+            years=range(datetime.now().year - 100, datetime.now().year)))
+    city = forms.CharField(
+        label='City',
+        max_length=128,
+        widget=forms.TextInput(attrs={'placeholder': 'City'})
+    )
     class Meta:
         model = User
         fields = ('email', 'username', 'password', 'first_name', 'last_name', 'birthday', 'country', 'city')
 
+
+class PostForm(forms.ModelForm):
+    title = forms.CharField(
+        label='Title',
+        max_length=128,
+        widget=forms.TextInput(attrs={'placeholder': 'Title'})
+    )
+    description = forms.CharField(
+        label='Description',
+        max_length=1000,
+        widget=forms.Textarea(attrs={'placeholder': 'Description'})
+    )
+    image = forms.FileField(
+        label='Image',
+        max_length=128
+    )
+
+    class Meta:
+        model = Post
+        fields = ('title', 'description', 'image')

@@ -1,81 +1,71 @@
-{% extends "base.html" %}
-{% block content %}
-{% if form.errors %}
-    <div style="color: red;">{{ form.errors }}</div>
-{% endif %}
-        <form class="form-horizontal" method="post" action="{% url 'sing_up'%}">
-            {% csrf_token %}
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                Email
-                            </span>
-                            {{ form.email }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                Username
-                            </span>
-                            {{ form.username }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                Password
-                            </span>
-                            {{ form.password }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                First Name
-                            </span>
-                            {{ form.first_name }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                Last Name
-                            </span>
-                            {{ form.last_name }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                Birthday
-                            </span>
-                            {{ form.birthday }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                Country
-                            </span>
-                            {{ form.country }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                City
-                            </span>
-                            {{ form.city }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <button type="submit" class="btn">Sing Up</button>
-                    </div>
-                    
+{% load staticfiles %}
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="ie6 ielt8"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="ie7 ielt8"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="ie8"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <title>Singup</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}" />
+</head>
+
+<body>
+    <div class="container">
+        <section id="content">
+            <form action="{% url 'sing_up'%}?next=/" method="post">
+                {% csrf_token %}
+                <h1>Singup Form</h1>
+                <div class="input-group">
                 </div>
+                <div class="input-group">
+                    {{ form.email }}
+                </div>
+                <div class="input-group">
+                    {{ form.password }}
+                </div>
+                <div class="input-group">
+                    {{ form.username }}
+                </div>
+                <div class="input-group">
+                    {{ form.first_name }}
+                </div>
+                <div class="input-group">
+                    {{ form.last_name }}
+                </div>
+                <div class="input-group" name="birthday">
+                    <label for="id_birthday" name="birthday">Your Birthday</label>
+                </div>
+                <div class="input-group" id="id_birthday">
+                    {{ form.birthday }}
+                </div>
+                <div class="input-group">
+                    <label for="id_country" name="country">Your Country</label>
+                    {{ form.country }}
+                </div>
+                <div class="input-group">
+                    {{ form.city }}
+                </div>
+                {% if form.errors %}
+                <div style="color: red;">{{ form.errors }}</div>
+                {% endif %}
+                <div>
+                    <input type="submit" value="Sing up" />
+                    <a href="{% url 'login'%}">Sing in</a>
+                </div>
+            </form>
+            <!-- form -->
+
+            <div class="button">
             </div>
-        </form>
-{% endblock %}
+            <!-- button -->
+        </section>
+        <!-- content -->
+    </div>
+    <!-- container -->
+</body>
+
+</html>

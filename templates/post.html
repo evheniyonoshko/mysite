@@ -1,0 +1,43 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="ie6 ielt8"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="ie7 ielt8"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="ie8"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <title>My site</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}" />
+</head>
+
+<body>
+    <div class="container">
+        <section id="content">
+            {% if request.user.is_authenticated %}
+                <div class="posts">
+                    <div id="posts">
+                        <div id="title">
+                            <h2>{{ context.title }}</h2>
+                        </div>
+                        <div id="description">
+                            {{ context.description }}
+                        </div>
+                        <div id="image">
+                            <img src="/media/{{ context.image }}">
+                        </div>
+                        <p>Likes: {{context.likes.count}}</p>
+                    </div>
+                </div>
+            {% else %}
+            {% endif %}
+        </section>
+        <!-- content -->
+    </div>
+    <!-- container -->
+</body>
+
+</html>

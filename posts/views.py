@@ -10,7 +10,47 @@ from posts import forms, models
 
 @login_required(login_url="accounts/login/")
 def index(request):
-    return render(request,"base.html")
+    """
+    Posts
+
+    :param request: django.http.request.HttpRequest
+    :return: django.http.response.HttpResponse or django.http.response.HttpResponseRedirect
+    """
+    context = models.Post.objects.all()
+    form = forms.PostForm()
+    if request.method == 'POST':
+        form = forms.PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = models.Post.objects.create(user=request.user,
+                                              title=form.cleaned_data['title'],
+                                              description=form.cleaned_data['description'],
+                                              image=request.FILES['image'])
+            post.save()
+            return redirect('/')
+    return render(request, 'base.html', context={'form': form,
+                                             'context': context})
+
+
+@login_required(login_url="accounts/login/")
+def post(request, post_id):
+    print(post_id)
+    obj = models.Post.objects.get(id=int(post_id))
+    return render(request, 'post.html', context={'context': obj})
+
+
+def post_like(request, *args, **kwargs):
+    post_id = kwargs.get('post_id')
+    obj = models.Post.objects.get(id=int(post_id))
+    url_ = obj.get_absolute_url()
+    user = request.user
+    if user.is_authenticated():
+        if user in obj.likes.all():
+            obj.likes.remove(user)
+        else:
+            obj.likes.add(user)
+    return redirect(url_)
+
+
 
 def login(request, page='login'):
     """
@@ -66,9 +106,9 @@ def confirm(request, confirmation_code, email):
 
 
 def sing_up(request, page='sing_up'):
-    form = forms.SingUpFrom()
+    form = forms.SingUpForm()
     if request.method == 'POST':
-        form = forms.SingUpFrom(request.POST)
+        form = forms.SingUpForm(request.POST)
         if form.is_valid():
             print(form.changed_data)
             try:

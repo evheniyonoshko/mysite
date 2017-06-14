@@ -2,9 +2,11 @@
 
 from django.db import models
 from django.contrib.auth import models as auth_models
+from django.core.urlresolvers import reverse
 
-from lib import uploads
-from lib import country_list
+from mysite import settings
+
+from lib import uploads, country_list
 
 
 __author__ = 'Yevhenii Onoshko'
@@ -66,7 +68,7 @@ class User(auth_models.PermissionsMixin, auth_models.AbstractBaseUser):
     birthday = models.DateField(blank=True, null=True)
     country = models.CharField(max_length=128, choices=COUNTRY)
     city = models.CharField(max_length=128)
-    confirmation_code = models.CharField(max_length=128,)
+    confirmation_code = models.CharField(max_length=128, blank=True, null=True)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 
@@ -96,3 +98,17 @@ class User(auth_models.PermissionsMixin, auth_models.AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
+
+class Post(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, default=3)
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="post_likes")
+    title = models.CharField("Title", max_length=128, null=True)
+    description = models.TextField("Description", null=True)
+    image = models.ImageField("Image", upload_to=uploads.get_document_upload_path, null=True)
+
+    def get_absolute_url(self):
+        return reverse("posts:post_detail", kwargs={'post_id': self.id})
+
+
+    def get_like_url(self):
+        return reverse("posts:post_like", kwargs={'id': self.id})

@@ -10,6 +10,7 @@ __pycache__/
 */migrations/*
 
 static_root/*
+media/*
 
 
 # Distribution / packaging
