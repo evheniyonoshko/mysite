@@ -56,7 +56,7 @@
                 <a class="btn btn-default" href="{% url 'posts:comment_remove' id=comment.id %}"><span class="glyphicon glyphicon-remove"></span></a>
             {% endif %}
         </div>
-        <strong>{{ comment.author.email }}</strong>
+        <strong>{{ comment.author.get_full_name }}</strong>
         <p>{{ comment.text|linebreaks }}</p>
     </div>
     {% endif %}
