@@ -36,8 +36,11 @@ class UserManager(auth_models.BaseUserManager):
                 email=UserManager.normalize_email(email),
                 first_name = kwargs['first_name'] or None,
                 last_name = kwargs['last_name'] or None,
-                passport_number = kwargs['passport_number'] or None,
-            )
+                username=kwargs['username'] or None,
+                birthday=kwargs['birthday'] or None,
+                country=kwargs['country'] or None,
+                city=kwargs['city'] or None,
+                confirmation_code=kwargs['confirmation_code'] or None,)
             user.save(using=self._db)
         user.set_password(password)
         user.save(using=self._db)
