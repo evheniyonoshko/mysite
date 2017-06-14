@@ -202,7 +202,7 @@ def confirm(request, confirmation_code, username):
 			user.save()
 		return redirect('posts:list')
 	except:
-		raise ValueError('bad confirm value')
+		raise ValueError('Confirmation_code: {}, Username: {}'.format(confirmation_code, username))
 
 
 def sing_up(request, page='sing_up'):
