@@ -184,7 +184,7 @@ def logout(request):
 
 def send_email(request, user):
     msg = EmailMessage("Account confirmation",
-                       "http://mysite-test-task.herokuapp.com/confirm/" + str(user.confirmation_code) + "/" + user.username,
+                       "http://mysite-test-task.herokuapp.com/confirm/" + str(user.confirmation_code) + "/" + user.email,
                        to=[user.email])
     msg.send()
     return HttpResponseRedirect('/')
@@ -194,15 +194,16 @@ def send_registration_confirmation(request, user):
 	send_email(request, user)
 
 
-def confirm(request, confirmation_code, username):
-	try:
-		user = models.User.objects.get(username=username)
+def confirm(request, confirmation_code, email):
+    user = models.User.objects.get(email=email)
+    try:
 		if user.confirmation_code == confirmation_code:
 			user.is_active = True
 			user.save()
 		return redirect('posts:list')
-	except:
-		raise ValueError('Confirmation_code: {}, Username: {}'.format(confirmation_code, username))
+    except:
+        user.delete()
+        raise ValueError('Confirmation_code: {}, Email: {}'.format(confirmation_code, email))
 
 
 def sing_up(request, page='sing_up'):
