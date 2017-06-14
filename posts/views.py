@@ -217,16 +217,16 @@ def sing_up(request, page='sing_up'):
                 raise ValueError('This email address already exists. Please try again')
             except:
                 confirmation_code = ''.join(random.choice(string.ascii_uppercase + string.digits + string.ascii_lowercase) for x in range(33))
-                user = models.User(email=form.cleaned_data['email'],
-                                   username=form.cleaned_data['username'],
-                                   first_name=form.cleaned_data['first_name'],
-                                   last_name=form.cleaned_data['last_name'],
-                                   birthday=form.cleaned_data['birthday'],
-                                   country=form.cleaned_data['country'],
-                                   city=form.cleaned_data['city'],
-                                   confirmation_code=confirmation_code)
-                user.set_password = form.cleaned_data['password']
-                user.save()
+                user = models.User.objects.create_user(
+                    email=form.cleaned_data['email'],
+                    password=form.cleaned_data['password'],
+                    username=form.cleaned_data['username'],
+                    first_name=form.cleaned_data['first_name'],
+                    last_name=form.cleaned_data['last_name'],
+                    birthday=form.cleaned_data['birthday'],
+                    country=form.cleaned_data['country'],
+                    city=form.cleaned_data['city'],
+                    confirmation_code=confirmation_code)
                 send_registration_confirmation(request, user)
                 return render(request, 'login.html', context={'form': form,
                                                               'message': 'Please confirm your email and then you can login'})
