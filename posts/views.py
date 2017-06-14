@@ -200,11 +200,9 @@ def confirm(request, confirmation_code, username):
 		if user.confirmation_code == confirmation_code and user.date_joined > (datetime.now()-timedelta(days=1)):
 			user.is_active = True
 			user.save()
-			user.backend='django.contrib.auth.backends.ModelBackend' 
-			auth.login(request, user)
 		return redirect('posts:list')
 	except:
-		return redirect('posts:list')
+		raise ValueError('bad confirm value')
 
 
 def sing_up(request, page='sing_up'):
