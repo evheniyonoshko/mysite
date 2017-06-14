@@ -7,3 +7,4 @@ dj-database-url==0.4.2
 gunicorn==19.3.0
 whitenoise==2.0.3
 Pillow==4.1.1
+djangorestframework==3.6.3
