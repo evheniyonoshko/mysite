@@ -1,6 +1,5 @@
 import random
 import string
-from urllib.parse import quote_plus
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
@@ -15,6 +14,11 @@ from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from datetime import datetime, timedelta
 from posts import forms, models
+
+try:
+    from urllib.parse import urlparse
+except ImportError:
+     from urlparse import urlparse
 
 
 @login_required(login_url="accounts/login/")
