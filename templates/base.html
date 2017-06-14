@@ -12,58 +12,24 @@
     <meta charset="utf-8">
     <title>My site</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    
+
 </head>
 
 <body>
+
     <div class="container">
         <section id="content">
-            {% if request.user.is_authenticated %}
-                <li><a href="{% url 'logout'%}">Sing Out</a></li>
-                <form action="{% url 'index'%}?next=/" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <h1>Create post</h1>
-                    <div class="input-group">
-                        {{ form.title }}
-                    </div>
-                    <div class="input-group">
-                        {{ form.description }}
-                    </div>
-                    <div class="input-group">
-                        {{ form.image }}
-                    </div>
-                    {% if form.errors %}
-                        <div style="color: red;">{{ form.errors }}</div>
-                    {% endif %}
-                    <button type="submit">Submit</button>
-                </form><!-- form -->
+            {% block content %}
 
-
-                <div class="posts">
-                    
-                    {% for i in context %}
-                        <div id="posts">
-                            <div id="title">
-
-                                <a href="post/{{ i.id }}"><h2>{{ i.title }}</h2></a>
-                            </div>
-                            <div id="description">
-                                {{ i.description }}
-                            </div>
-                            <div id="image">
-                                <img src="/media/{{ i.image }}">
-                            </div>
-                            <p>Likes: {{i.likes.count}}</p>
-                        </div>
-                    {% endfor %}
-                    
-                </div>
-            {% else %}
-                <li><a href"={% url 'login'%}">Sing In</a></li>
-            {% endif %}
+            {% endblock %}
         </section>
         <!-- content -->
     </div>
     <!-- container -->
+
+<script src="{% static 'js/base.js' %}"></script>
 </body>
 
 </html>

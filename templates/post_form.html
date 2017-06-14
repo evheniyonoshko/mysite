@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+ <form action="{% url 'posts:post_form'%}?next=/" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <h1>Create post</h1>
+    <div class="input-group">
+        {{ form.title }}
+    </div>
+    <div class="input-group">
+        {{ form.description }}
+    </div>
+    <div class="input-group">
+        {{ form.image }}
+    </div>
+    {% if form.errors %}
+        <div style="color: red;">{{ form.errors }}</div>
+    {% endif %}
+    <button type="submit">Submit</button>
+</form><!-- form -->
+{% endblock%}

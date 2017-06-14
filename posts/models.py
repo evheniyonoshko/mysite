@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import models as auth_models
 from django.core.urlresolvers import reverse
+from django.utils import timezone
 
 from mysite import settings
 
@@ -77,7 +79,7 @@ class User(auth_models.PermissionsMixin, auth_models.AbstractBaseUser):
     objects = UserManager()
 
     def get_full_name(self):
-        return self.email
+        return '{} {}'.format(self.first_name, self.last_name)
 
     def get_short_name(self):
         return self.get_full_name()
@@ -107,8 +109,29 @@ class Post(models.Model):
     image = models.ImageField("Image", upload_to=uploads.get_document_upload_path, null=True)
 
     def get_absolute_url(self):
-        return reverse("posts:post_detail", kwargs={'post_id': self.id})
-
+        return reverse("posts:post_detail", kwargs={'id': self.id})
 
     def get_like_url(self):
-        return reverse("posts:post_like", kwargs={'id': self.id})
+        return reverse("posts:like-toggle", kwargs={"id": self.id})
+
+    def get_api_like_url(self):
+        return reverse("posts:like-api-toggle", kwargs={"id": self.id})
+    
+    class Meta:
+        ordering = ["-id",]
+
+    @property
+    def get_content_type(self):
+        instance = self
+        content_type = ContentType.objects.get_for_model(instance.__class__)
+        return content_type
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, related_name='comments')
+    author = models.ForeignKey(User, related_name='users')
+    text = models.TextField()
+    created_date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.text

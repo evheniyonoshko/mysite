@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'posts',
 ]
 
@@ -131,3 +132,5 @@ LOGIN_URL = '/accounts/login/'
 DISABLE_COLLECTSTATIC=1
 
 AUTH_PROFILE_MODULE = 'posts.Profile'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap'

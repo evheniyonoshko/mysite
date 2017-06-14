@@ -7,9 +7,11 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
-    url(r'^post/(?P<post_id>\d+)$', views.post, name='post_detail'),
-    url(r'^post/(?P<post_id>\d+)/like/$', views.post_like, name='post_like'),
+    url(r'^$', views.post_list, name='list'),
+    url(r'^post/(?P<id>\d+)$', views.post_detail, name='post_detail'),
+    url(r'^postform', views.post_form, name='post_form'),
+    url(r'^(?P<id>[\d+]+)/like/$', views.PostLikeToggle.as_view(), name='like-toggle'),
+    url(r'^api/(?P<id>[\d+]+)/like/$', views.PostLikeAPIToggle.as_view(), name='like-api-toggle'),
     url(r'^accounts/login/$', views.login, name='login'),
     url(r'^accounts/logout/$', views.logout, name='logout'),
     url(r'^accounts/sing_up/$', views.sing_up, name='sing_up'),

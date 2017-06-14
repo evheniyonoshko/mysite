@@ -1,15 +1,24 @@
 import random
 import string
+from urllib.parse import quote_plus
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail
+from django.utils import timezone
+from django.db.models import Q
+from django.views.generic import RedirectView
+from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import authentication, permissions
 from datetime import datetime, timedelta
 from posts import forms, models
 
 
 @login_required(login_url="accounts/login/")
-def index(request):
+def post_form(request):
     """
     Posts
 
@@ -27,29 +36,75 @@ def index(request):
                                               image=request.FILES['image'])
             post.save()
             return redirect('/')
-    return render(request, 'base.html', context={'form': form,
+    return render(request, 'post_form.html', context={'form': form,
                                              'context': context})
+
+@login_required(login_url="accounts/login/")
+def post_list(request):
+    today = timezone.now().date()
+    queryset_list = models.Post.objects.all()
+    
+    query = request.GET.get("q")
+    if query:
+        queryset_list = queryset_list.filter(
+                Q(title__icontains=query)|
+                Q(description__icontains=query)|
+                Q(user__country__icontains=query) |
+                Q(user__city__icontains=query)
+                ).distinct()
+    paginator = Paginator(queryset_list, 8) # Show 25 contacts per page
+    page_request_var = "page"
+    page = request.GET.get(page_request_var)
+    try:
+        queryset = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        queryset = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        queryset = paginator.page(paginator.num_pages)
+
+
+    context = {
+        "object_list": queryset, 
+        "title": "List",
+        "page_request_var": page_request_var,
+        "today": today,
+    }
+    return render(request, "post_list.html", context)
+
+@login_required(login_url="accounts/login/")
+def post_detail(request, id):
+    instance = get_object_or_404(models.Post, id=id)
+    if not request.user.is_staff or not request.user.is_superuser:
+        raise Http404
+
+    initial_data = {
+            "content_type": instance.get_content_type,
+            "object_id": instance.id
+    }
+    
+    context = {
+        "title": instance.title,
+        "description": instance.description,
+        "image": instance.image,
+        "instance": instance,
+    }
+    return render(request, "post_detail.html", context)
 
 
 @login_required(login_url="accounts/login/")
-def post(request, post_id):
-    print(post_id)
-    obj = models.Post.objects.get(id=int(post_id))
-    return render(request, 'post.html', context={'context': obj})
-
-
 def post_like(request, *args, **kwargs):
     post_id = kwargs.get('post_id')
     obj = models.Post.objects.get(id=int(post_id))
-    url_ = obj.get_absolute_url()
+    url_ = obj.get_like_url()
     user = request.user
     if user.is_authenticated():
         if user in obj.likes.all():
             obj.likes.remove(user)
         else:
             obj.likes.add(user)
-    return redirect(url_)
-
+    return redirect('/')
 
 
 def login(request, page='login'):
@@ -83,7 +138,7 @@ def logout(request):
     """
     if request.user.is_authenticated():
         auth.logout(request)
-    return redirect('index')
+    return redirect('posts:list')
 
 
 def send_registration_confirmation(user):
@@ -100,9 +155,9 @@ def confirm(request, confirmation_code, email):
 			user.save()
 			user.backend='django.contrib.auth.backends.ModelBackend' 
 			auth.login(request, user)
-		return redirect('index')
+		return redirect('posts:list')
 	except:
-		return redirect('index')
+		return redirect('posts:list')
 
 
 def sing_up(request, page='sing_up'):
@@ -128,3 +183,45 @@ def sing_up(request, page='sing_up'):
                 user.save()
                 send_registration_confirmation(user)
     return render(request, 'sing_up.html', context={'form': form})
+
+
+
+class PostLikeToggle(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        id = self.kwargs.get("id")
+        print(id)
+        obj = get_object_or_404(models.Post, id=id)
+        url_ = obj.get_absolute_url()
+        user = self.request.user
+        if user.is_authenticated():
+            if user in obj.likes.all():
+                obj.likes.remove(user)
+            else:
+                obj.likes.add(user)
+        return url_
+
+
+class PostLikeAPIToggle(APIView):
+    authentication_classes = (authentication.SessionAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, id, format=None):
+        # id = self.kwargs.get("id")
+        obj = get_object_or_404(models.Post, id=id)
+        url_ = obj.get_absolute_url()
+        user = self.request.user
+        updated = False
+        liked = False
+        if user.is_authenticated():
+            if user in obj.likes.all():
+                liked = False
+                obj.likes.remove(user)
+            else:
+                liked = True
+                obj.likes.add(user)
+            updated = True
+        data = {
+            "updated": updated,
+            "liked": liked
+        }
+        return Response(data)

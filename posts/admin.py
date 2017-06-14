@@ -5,7 +5,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 
 from posts.forms import UserAdminForm
-from posts.models import User
+from posts.models import User, Post,Comment
 
 
 class UserAdmin(BaseUserAdmin):
@@ -44,3 +44,6 @@ class UserAdmin(BaseUserAdmin):
         )
 
 admin.site.register(User, UserAdmin)
+
+admin.site.register(Post)
+admin.site.register(Comment)

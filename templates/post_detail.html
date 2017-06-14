@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+
+{% block head_title %}
+{{ instance.title }} | {{ block.super }}
+{% endblock head_title %}
+
+
+ {% block post_detail_link %}
+  <li><a href='{{ instance.get_absolute_url }}'>{{ instance.title }}</a></li>
+  {% endblock %}
+
+
+
+{% block content %}
+<h3><a href="{% url 'posts:list'%}">Go To Main Page</a></h3>
+<div class='col-sm-6 col-sm-offset-3'>
+    {% if instance.image %}
+    <img src='{{ instance.image.url }}' class='img-responsive' />
+    {% endif %}
+<h2>{{ title }} </h2>
+<h3>{{ description }} </h3>
+
+<!-- {% if instance.read_time|time:"i" <= "01" %} < 1 minute {% else %}{{ instance.read_time|time:"i" }} minutes {% endif %} -->
+
+
+<p><a class='like-btn' data-href='{{ instance.get_api_like_url }}' data-likes='{{ instance.likes.count }}' href='{{ instance.get_like_url }}'>{{ instance.likes.count }} Like</a></p>
+{% if instance.user.get_full_name %}
+<p>Author: {{ instance.user.get_full_name }}</p>
+{% endif %}
+
+<p><div class="fb-like" data-href="{{ request.build_absolute_uri }}" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+<hr/>
+</p>
+<div class='row'>
+<div class='col-sm-12 '>
+
+    <div class='post-detail-item'>
+        {{ instance.content|safe }}
+      </div>
+
+    <hr/>
+    <br/>
+
+</div>
+</div>
+</div>
+
+
+{% endblock content %}

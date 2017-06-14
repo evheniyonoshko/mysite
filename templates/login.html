@@ -13,7 +13,7 @@
 <body>
 <div class="container">
 	<section id="content">
-		<form action="{% url 'login'%}?next=/" method="post">
+		<form action="{% url 'posts:login'%}?next=/" method="post">
             {% csrf_token %}
 			<h1>Singin Form</h1>
 			<div class="input-group">
@@ -27,7 +27,7 @@
             {% endif %}
 			<div>
 				<input type="submit" value="Sing in" />
-				<a href="{% url 'sing_up'%}">Sing up</a>
+				<a href="{% url 'posts:sing_up'%}">Sing up</a>
 			</div>
 		</form><!-- form -->
 
