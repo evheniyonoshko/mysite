@@ -45,6 +45,39 @@
 </div>
 </div>
 </div>
+<hr>
+<a class="btn btn-default" href="{% url 'posts:add_comment_to_post' id=instance.id %}">Add comment</a>
+{% for comment in comments %}
+    {% if user.is_authenticated and user.is_staff %}
+    <div class="comment">
+        <div class="date">
+            {{ comment.created_date }}
+            {% if not comment.approved_comment %}
+                <a class="btn btn-default" href="{% url 'posts:comment_remove' id=comment.id %}"><span class="glyphicon glyphicon-remove"></span></a>
+            {% endif %}
+        </div>
+        <strong>{{ comment.author.email }}</strong>
+        <p>{{ comment.text|linebreaks }}</p>
+    </div>
+    {% endif %}
+{% empty %}
+    <p>No comments here yet :(</p>
+{% endfor %}
 
+<div class="pagination">
+    <span class="step-links">
+        {% if comments.has_previous %}
+            <a href="?{{ page_request_var }}={{ comments.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ instan.number }} of {{ comments.paginator.num_pages }}.
+        </span>
+
+        {% if comments.has_next %}
+            <a href="?{{ page_request_var }}={{ comments.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">next</a>
+        {% endif %}
+    </span>
+</div>
 
 {% endblock content %}

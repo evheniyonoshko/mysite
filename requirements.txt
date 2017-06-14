@@ -8,3 +8,5 @@ gunicorn==19.3.0
 whitenoise==2.0.3
 Pillow==4.1.1
 djangorestframework==3.6.3
+boto==2.47.0
+django-storages==1.5.2

@@ -78,6 +78,10 @@ td {
     width: 70%;
 }
 
+.comment {
+    margin: 20px 0px 20px 20px;
+}
+
 img {
     max-width: 200px;
     margin: 5px;

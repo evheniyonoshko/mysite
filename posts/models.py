@@ -102,7 +102,7 @@ class User(auth_models.PermissionsMixin, auth_models.AbstractBaseUser):
         return True
 
 class Post(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, default=3)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="post_likes")
     title = models.CharField("Title", max_length=128, null=True)
     description = models.TextField("Description", null=True)

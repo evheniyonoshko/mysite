@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
-from posts.models import User, Post
+from posts.models import User, Post, Comment
 from mysite import settings
 from django.forms import extras
 from datetime import datetime
@@ -94,3 +94,11 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ('title', 'description', 'image')
+
+
+class CommentForm(forms.ModelForm):
+
+    class Meta:
+        model = Comment
+        fields = ('text',)
+
