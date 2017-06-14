@@ -197,7 +197,7 @@ def send_registration_confirmation(request, user):
 def confirm(request, confirmation_code, username):
 	try:
 		user = models.User.objects.get(username=username)
-		if user.confirmation_code == confirmation_code and user.date_joined > (datetime.now()-timedelta(days=1)):
+		if user.confirmation_code == confirmation_code:
 			user.is_active = True
 			user.save()
 		return redirect('posts:list')
