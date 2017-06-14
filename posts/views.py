@@ -3,7 +3,7 @@ import string
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.utils import timezone
 from django.db.models import Q
 from django.views.generic import RedirectView
@@ -42,6 +42,7 @@ def post_form(request):
             return redirect('/')
     return render(request, 'post_form.html', context={'form': form,
                                              'context': context})
+
 
 @login_required(login_url="accounts/login/")
 def post_list(request):
@@ -181,10 +182,16 @@ def logout(request):
     return redirect('posts:list')
 
 
-def send_registration_confirmation(user):
-	title = "Account confirmation"
-	content = "http://mysite-test-task.herokuapp.com/confirm/" + str(user.confirmation_code) + "/" + user.email
-	send_mail(title, content, 'yevhen.didi@gmail.com', [user.email], fail_silently=False)
+def send_email(request, user):
+    msg = EmailMessage("Account confirmation",
+                       "http://mysite-test-task.herokuapp.com/confirm/" + str(user.confirmation_code) + "/" + user.email,
+                       to=[user.email])
+    msg.send()
+    return HttpResponseRedirect('/')
+
+
+def send_registration_confirmation(request, user):
+	send_email(request, user)
 
 
 def confirm(request, confirmation_code, email):
@@ -223,7 +230,6 @@ def sing_up(request, page='sing_up'):
                 user.save()
                 send_registration_confirmation(user)
     return render(request, 'sing_up.html', context={'form': form})
-
 
 
 class PostLikeToggle(RedirectView):

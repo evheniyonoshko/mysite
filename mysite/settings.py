@@ -140,3 +140,11 @@ DISABLE_COLLECTSTATIC=1
 AUTH_PROFILE_MODULE = 'posts.Profile'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap'
+
+DEFAULT_FROM_EMAIL = 'yevhen.didi@gmail.com'
+SERVER_EMAIL = 'yevhen.didi@gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'yevhen.didi@gmail.com'
+EMAIL_HOST_PASSWORD = 'literbolik'
