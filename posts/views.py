@@ -194,9 +194,9 @@ def send_registration_confirmation(request, user):
 	send_email(request, user)
 
 
-def confirm(request, confirmation_code, email):
+def confirm(request, confirmation_code, username):
 	try:
-		user = models.User.objects.get(email=email)
+		user = models.User.objects.get(username=username)
 		if user.confirmation_code == confirmation_code and user.date_joined > (datetime.now()-timedelta(days=1)):
 			user.is_active = True
 			user.save()
