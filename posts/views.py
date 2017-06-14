@@ -197,10 +197,13 @@ def send_registration_confirmation(request, user):
 def confirm(request, confirmation_code, email):
     user = models.User.objects.get(email=email)
     try:
-		if user.confirmation_code == confirmation_code:
-			user.is_active = True
-			user.save()
-		return redirect('posts:list')
+        if user.confirmation_code == confirmation_code:
+            user.is_active = True
+            user.save()
+            return redirect('posts:list')
+        else:
+            user.delete()
+            raise ValueError('Confirmation_code: {}, Email: {}'.format(confirmation_code, email))
     except:
         user.delete()
         raise ValueError('Confirmation_code: {}, Email: {}'.format(confirmation_code, email))
