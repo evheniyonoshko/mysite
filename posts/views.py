@@ -184,7 +184,7 @@ def logout(request):
 
 def send_email(request, user):
     msg = EmailMessage("Account confirmation",
-                       "http://mysite-test-task.herokuapp.com/confirm/" + str(user.confirmation_code) + "/" + user.email,
+                       "http://mysite-test-task.herokuapp.com/confirm/" + str(user.confirmation_code) + "/" + user.username,
                        to=[user.email])
     msg.send()
     return HttpResponseRedirect('/')
