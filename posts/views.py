@@ -228,7 +228,7 @@ def sing_up(request, page='sing_up'):
                                    confirmation_code=confirmation_code)
                 user.set_password = form.cleaned_data['password']
                 user.save()
-                send_registration_confirmation(user)
+                send_registration_confirmation(request, user)
     return render(request, 'sing_up.html', context={'form': form})
 
 
