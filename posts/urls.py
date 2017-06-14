@@ -17,7 +17,7 @@ urlpatterns = [
     url(r'^accounts/login/$', views.login, name='login'),
     url(r'^accounts/logout/$', views.logout, name='logout'),
     url(r'^accounts/sing_up/$', views.sing_up, name='sing_up'),
-    url(r'^confirm/(?P<confirmation_code>[^/]+)/(?P<email>\w+)/$', views.confirm, name='confirm'),
+    url(r'^confirm/(?P<confirmation_code>[^/]+)/(?P<email>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/$', views.confirm, name='confirm'),
 ]
 
 if settings.DEBUG:
